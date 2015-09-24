@@ -4,9 +4,6 @@ touch /var/log/nginx/access.log
 touch /var/log/nginx/error.log
 touch /var/log/cron/owncloud.log
 
-test -e /owncloud/config.php || cp /root/owncloud_config.php /owncloud/config.php
-test -e /owncloud/3party_apps.conf || cp /root/3party_apps.conf /owncloud/
-
 if [ -z "$SSL_CERT" ]
 then
     echo "Copying nginx.conf without SSL support …"
@@ -24,6 +21,11 @@ else
 fi
 
 chown -R www-data:www-data /var/www/owncloud /owncloud
+
+setfattr -n trusted.overlay.opaque -v "y" /owncloud/data
+setfattr -n trusted.overlay.opaque -v "y" /owncloud/config
+mount -t overlay -o lowerdir=/owncloud-shared,upperdir=/owncloud,workdir=/work overlayfs /var/www/owncloud
+
 echo "Starting server …"
 
 tail --follow --retry /var/log/nginx/*.log /var/log/cron/owncloud.log &
