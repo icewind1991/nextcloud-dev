@@ -27,12 +27,13 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         smbclient \
         sudo \
         wget \
-        attr
+        attr \
+        inotify-tools
 
 ENV OWNCLOUD_IN_ROOTPATH 1
 ENV OWNCLOUD_SERVERNAME localhost
 
-ADD misc/bootstrap.sh misc/occ /usr/local/bin/
+ADD misc/bootstrap.sh misc/occ misc/reload.sh /usr/local/bin/
 ADD configs/3party_apps.conf configs/owncloud_config.php configs/nginx_ssl.conf configs/nginx.conf /root/
 
 ## Could be used: https://github.com/docker-library/owncloud/blob/master/8.1/Dockerfilemoun
