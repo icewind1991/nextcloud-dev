@@ -16,6 +16,8 @@ You have two options to get the image:
 
 `docker run --privileged -d -p 8123:80 -v /srv/http/owncloud:/owncloud-shared owncloud-dev`
 
+Replace `/srv/http/owncloud` with the location of the ownCloud source
+
 ## License
 
 This project is distributed under [GNU Affero General Public License, Version 3][AGPLv3].
