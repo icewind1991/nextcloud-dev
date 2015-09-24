@@ -14,7 +14,7 @@ You have two options to get the image:
 
 ## ownCloud up and running
 
-`docker run --privileged -d -p 8123:80 -v /srv/http/owncloud:/owncloud-shared owncloud-dev`
+`docker run --privileged -d -p 8123:80 -v /srv/http/owncloud:/owncloud-shared icewind1991/owncloud-dev`
 
 Replace `/srv/http/owncloud` with the location of the ownCloud source
 
