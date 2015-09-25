@@ -2,6 +2,8 @@
 
 Docker image for [ownCloud][] for development
 
+This image pulls the ownCloud source from the host filesystem while maintaining a seperate config and data directory which makes it easy to test your local code in a clean ownCloud instance.
+
 The build instructions are tracked on [GitHub][this.project_github_url].
 Automated builds are hosted on [Docker Hub][this.project_docker_hub_url].
 
