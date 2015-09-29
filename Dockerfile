@@ -36,7 +36,7 @@ ENV OWNCLOUD_IN_ROOTPATH 1
 ENV OWNCLOUD_SERVERNAME localhost
 
 ADD misc/bootstrap.sh misc/occ misc/reload.sh /usr/local/bin/
-ADD configs/3party_apps.conf configs/owncloud_config.php configs/nginx_ssl.conf configs/nginx.conf /root/
+ADD configs/3party_apps.conf configs/owncloud_config.php configs/nginx_ssl.conf configs/nginx.conf configs/autoconfig_mysql.php /root/
 
 ## Could be used: https://github.com/docker-library/owncloud/blob/master/8.1/Dockerfilemoun
 ## RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys E3036906AD9F30807351FAC32D5D5E97F6978A26

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+OC_SOURCE="/srv/http/owncloud"
+
+SQL=$1
+PORT=`python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()'`
+NAME="oc-$PORT";
+
+if [ "$SQL" = "mysql" ]; then
+	SQL_PASS=`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c32;echo;`
+
+	docker run --name "$NAME-mysql" -e MYSQL_ROOT_PASSWORD=$SQL_PASS -e MYSQL_PASSWORD=owncloud -e MYSQL_USER=owncloud -e MYSQL_DATABASE=owncloud -d mysql:latest
+	sleep 1
+	docker run --name $NAME --privileged -d -p $PORT:80 --link "$NAME-mysql:mysql" -e SQL=mysql -v $OC_SOURCE:/owncloud-shared icewind1991/owncloud-dev
+else
+	docker run --name $NAME --privileged -d -p $PORT:80 -e SQL=sqlite -v $OC_SOURCE:/owncloud-shared icewind1991/owncloud-dev
+fi
+
+echo "Running on http://localhost:$PORT" 
