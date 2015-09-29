@@ -25,6 +25,7 @@ Replace `/srv/http/owncloud` with the location of the ownCloud source
 Edit `misc/ocserver` with the location of the ownCloud source and copy or symlink it to somewhere without your $PATH
 
 `ocserver` will automatically pick a free port, start a new oc server using sqlite on that port and display the url to the oc instance
+
 `ocserver mysql` will also start a mysql container and configure the oc instance to use mysql
 
 ## License
