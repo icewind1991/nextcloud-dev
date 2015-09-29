@@ -10,6 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         bzip2 \
         cron \
         nginx \
+        redis-server \
         php-apc \
         php5-apcu \
         php5-cli \
@@ -24,6 +25,7 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         php5-mysqlnd \
         php5-pgsql \
         php5-sqlite \
+        php5-redis \
         smbclient \
         sudo \
         wget \
