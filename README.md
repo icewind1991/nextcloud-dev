@@ -27,6 +27,7 @@ Edit `misc/ocserver` with the location of the ownCloud source and copy or symlin
 `ocserver` will automatically pick a free port, start a new oc server using sqlite on that port and display the url to the oc instance
 
 `ocserver mysql` will also start a mysql container and configure the oc instance to use mysql
+
 `ocserver pgsql` to use a postgresql container as database backend
 
 ## License
