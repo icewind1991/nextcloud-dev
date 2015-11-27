@@ -24,11 +24,10 @@ Replace `/srv/http/owncloud` with the location of the ownCloud source
 
 Edit `misc/ocserver` with the location of the ownCloud source and copy or symlink it to somewhere without your $PATH
 
-`ocserver` will automatically pick a free port, start a new oc server using sqlite on that port and display the url to the oc instance
+You can specify the database backend to be used by providing it as argument to the `ocserver` command.
+The following database backends are supported `sqlite` (default), `mysql`, `pgsql` and `oci`.
 
-`ocserver mysql` will also start a mysql container and configure the oc instance to use mysql
-
-`ocserver pgsql` to use a postgresql container as database backend
+For any database backends besides sqlite a seperate container will be started for the database.
 
 ## License
 
