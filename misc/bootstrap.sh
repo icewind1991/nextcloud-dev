@@ -15,12 +15,17 @@ fi
 
 if [ "$SQL" = "mysql" ]
 then
-	cp /root/autoconfig_mysql.php /owncloud/config/autoconfig.php
+	cp /root/autoconfig_mysql.php /var/www/owncloud/config/autoconfig.php
 fi
 
 if [ "$SQL" = "pgsql" ]
 then
-	cp /root/autoconfig_pgsql.php /owncloud/config/autoconfig.php
+	cp /root/autoconfig_pgsql.php /var/www/owncloud/config/autoconfig.php
+fi
+
+if [ "$SQL" = "oci" ]
+then
+	cp /root/autoconfig_oci.php /var/www/owncloud/config/autoconfig.php
 fi
 
 if [ "${OWNCLOUD_IN_ROOTPATH}" = "1" ]
@@ -30,7 +35,7 @@ else
     sed --in-place "s#-x-replace-oc-rootpath-#/var/www/#" /etc/nginx/nginx.conf
 fi
 
-chown -R www-data:www-data /var/www/owncloud /owncloud
+chown -R www-data:www-data /var/www/owncloud/data /var/www/owncloud/config
 
 echo "Starting server using $SQL database…"
 
@@ -38,6 +43,5 @@ tail --follow --retry /var/log/nginx/*.log /var/log/cron/owncloud.log &
 
 /usr/sbin/cron -f &
 /usr/bin/redis-server &
-/usr/local/bin/reload.sh &
-/etc/init.d/php5-fpm start
+service php5-fpm start
 /etc/init.d/nginx start
