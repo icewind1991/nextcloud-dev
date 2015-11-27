@@ -29,6 +29,12 @@ The following database backends are supported `sqlite` (default), `mysql`, `pgsq
 
 For any database backends besides sqlite a seperate container will be started for the database.
 
+## octests
+
+`misc/ocserver` starts a new owncloud server in a container and executes the php test suite on it
+
+It expects `ocserver` to be located in `$PATH`
+
 ## License
 
 This project is distributed under [GNU Affero General Public License, Version 3][AGPLv3].
