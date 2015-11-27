@@ -32,10 +32,6 @@ fi
 
 chown -R www-data:www-data /var/www/owncloud /owncloud
 
-setfattr -n trusted.overlay.opaque -v "y" /owncloud/data
-setfattr -n trusted.overlay.opaque -v "y" /owncloud/config
-mount -t overlay -o lowerdir=/owncloud-shared,upperdir=/owncloud,workdir=/work overlayfs /var/www/owncloud
-
 echo "Starting server using $SQL database…"
 
 tail --follow --retry /var/log/nginx/*.log /var/log/cron/owncloud.log &

@@ -1,21 +1,39 @@
 #!/bin/bash
 
 OC_SOURCE="/srv/http/owncloud"
+WORKDIR="/tmp/oc-docker"
 
 SQL=$1
 PORT=`python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()'`
 NAME="oc-$PORT";
 SQL_PASS=`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c32;echo;`
-
+ 
+mkdir -p "$WORKDIR/$NAME/data"
+mkdir -p "$WORKDIR/$NAME/config"
 
 if [ "$SQL" = "mysql" ]; then
 	docker run --name "$NAME-mysql" -e MYSQL_ROOT_PASSWORD=$SQL_PASS -e MYSQL_PASSWORD=owncloud -e MYSQL_USER=owncloud -d mysql:latest
-	docker run --name $NAME --privileged -d -p $PORT:80 --link "$NAME-mysql:mysql" -e SQL=mysql -v $OC_SOURCE:/owncloud-shared icewind1991/owncloud-dev
+	docker run --name $NAME -d -p $PORT:80 --link "$NAME-mysql:mysql" -e SQL=mysql -v $OC_SOURCE:/var/www/owncloud \
+		-v $WORKDIR/$NAME/data:/var/www/owncloud/data \
+		-v $WORKDIR/$NAME/config:/var/www/owncloud/config \
+		icewind1991/owncloud-dev
 elif [ "$SQL" = "pgsql" ]; then
 	docker run --name "$NAME-pgsql" -e POSTGRES_PASSWORD=owncloud -e POSTGRES_USER=owncloud -e POSTGRES_DATABASE=owncloud -d postgres:latest
-	docker run --name $NAME --privileged -d -p $PORT:80 --link "$NAME-pgsql:pgsql" -e SQL=pgsql -v $OC_SOURCE:/owncloud-shared icewind1991/owncloud-dev
+	docker run --name $NAME -d -p $PORT:80 --link "$NAME-pgsql:pgsql" -e SQL=pgsql -v $OC_SOURCE:/var/www/owncloud \
+		-v $WORKDIR/$NAME/data:/var/www/owncloud/data \
+		-v $WORKDIR/$NAME/config:/var/www/owncloud/config \
+		icewind1991/owncloud-dev
+elif [ "$SQL" = "oci" ]; then
+	docker run --name "$NAME-oci" -d wnameless/oracle-xe-11g
+	docker run --name $NAME -d -p $PORT:80 --link "$NAME-oci:oci" -e SQL=oci -v $OC_SOURCE:/var/www/owncloud \
+		-v $WORKDIR/$NAME/data:/var/www/owncloud/data \
+		-v $WORKDIR/$NAME/config:/var/www/owncloud/config \
+		icewind1991/owncloud-dev
 else
-	docker run --name $NAME --privileged -d -p $PORT:80 -e SQL=sqlite -v $OC_SOURCE:/owncloud-shared icewind1991/owncloud-dev
+	docker run --pid=host --name $NAME -d -p $PORT:80 -e SQL=sqlite -v $OC_SOURCE:/var/www/owncloud \
+		-v $WORKDIR/$NAME/data:/var/www/owncloud/data \
+		-v $WORKDIR/$NAME/config:/var/www/owncloud/config \
+		icewind1991/owncloud-dev
 fi
 
 echo "Running on http://localhost:$PORT" 
