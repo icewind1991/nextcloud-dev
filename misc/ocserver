@@ -30,7 +30,7 @@ elif [ "$SQL" = "oci" ]; then
 		-v $WORKDIR/$NAME/config:/var/www/owncloud/config \
 		icewind1991/owncloud-dev
 else
-	docker run --pid=host --name $NAME -d -p $PORT:80 -e SQL=sqlite -v $OC_SOURCE:/var/www/owncloud \
+	docker run --name $NAME -d -p $PORT:80 -e SQL=sqlite -v $OC_SOURCE:/var/www/owncloud \
 		-v $WORKDIR/$NAME/data:/var/www/owncloud/data \
 		-v $WORKDIR/$NAME/config:/var/www/owncloud/config \
 		icewind1991/owncloud-dev
