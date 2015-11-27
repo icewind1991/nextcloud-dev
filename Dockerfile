@@ -36,7 +36,8 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         attr \
         git \
         inotify-tools \
-        unzip
+        unzip \
+        phpunit
 
 ENV OWNCLOUD_IN_ROOTPATH 1
 ENV OWNCLOUD_SERVERNAME localhost
@@ -55,7 +56,7 @@ RUN ln -s /usr/local/instantclient/sqlplus /usr/bin/sqlplus
 RUN echo 'instantclient,/usr/local/instantclient' | pecl install oci8
 RUN echo "extension=oci8.so" > /etc/php5/fpm/conf.d/30-oci8.ini
 
-ADD misc/bootstrap.sh misc/occ /usr/local/bin/
+ADD misc/bootstrap.sh misc/occ misc/tests /usr/local/bin/
 ADD configs/3party_apps.conf configs/owncloud_config.php configs/nginx_ssl.conf configs/nginx.conf configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php /root/
 
 ## Could be used: https://github.com/docker-library/owncloud/blob/master/8.1/Dockerfilemoun

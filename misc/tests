@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cd /var/www/owncloud
+
+occ maintenance:install --admin-user=admin --admin-pass=admin
+ 
+cd tests
+
+phpunit --configuration phpunit.xml.dist
