@@ -1,4 +1,4 @@
-FROM php:apache
+FROM php:fpm
 MAINTAINER  Robin Appelman <robin@icewind.nl>
 # MAINTAINER  Robin Schneider <ypid@riseup.net>
 # MAINTAINER silvio <silvio@port1024.net>
@@ -9,6 +9,7 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
     apt-get install --assume-yes \
         bzip2 \
         cron \
+        nginx \
         redis-server \
         libaio-dev \
         phpunit \
@@ -46,7 +47,6 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
-ADD misc/bootstrap.sh misc/occ misc/tests /usr/local/bin/
 ADD configs/3party_apps.conf configs/owncloud_config.php configs/nginx_ssl.conf configs/nginx.conf configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php /root/
 
 RUN mkdir --parent /var/www/owncloud /owncloud/config /owncloud/data /var/log/cron
@@ -55,8 +55,11 @@ RUN mkdir --parent /var/www/owncloud /owncloud/config /owncloud/data /var/log/cr
 ## FIXME: Temporally: https://github.com/owncloud/core/issues/17329
 RUN echo 'apc.enable_cli = 1' >> $PHP_INI_DIR/php.ini
 
+ADD configs/php-fpm.conf /usr/local/etc/
 ADD configs/cron.conf /etc/oc-cron.conf
 RUN crontab /etc/oc-cron.conf
+
+ADD misc/bootstrap.sh misc/occ misc/tests /usr/local/bin/
 
 EXPOSE 80
 
