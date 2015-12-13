@@ -19,7 +19,8 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         attr \
         git \
         unzip \
-        phpunit
+        phpunit \
+        nano
 
 ENV OWNCLOUD_IN_ROOTPATH 1
 ENV OWNCLOUD_SERVERNAME localhost
@@ -43,9 +44,15 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
-    && docker-php-ext-install iconv mcrypt zip \
+        libpq5 \
+        libpq-dev \
+        libsqlite3-dev \
+        libcurl4-openssl-dev \
+        libicu-dev \
+    && docker-php-ext-install iconv mcrypt zip pdo pdo_pgsql pdo_sqlite pgsql pdo_mysql intl curl mbstring \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
+RUN pecl install apcu
 
 ADD configs/3party_apps.conf configs/owncloud_config.php configs/nginx_ssl.conf configs/nginx.conf configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php /root/
 
@@ -53,7 +60,7 @@ RUN mkdir --parent /var/www/owncloud /owncloud/config /owncloud/data /var/log/cr
 
 ## Allow usage of `sudo -u www-data php /var/www/owncloud/occ` with APC.
 ## FIXME: Temporally: https://github.com/owncloud/core/issues/17329
-RUN echo 'apc.enable_cli = 1' >> $PHP_INI_DIR/php.ini
+ADD configs/php.ini $PHP_INI_DIR/
 
 ADD configs/php-fpm.conf /usr/local/etc/
 ADD configs/cron.conf /etc/oc-cron.conf
