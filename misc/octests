@@ -8,7 +8,11 @@ CONTAINERS=`ocserver $SQL | tail -2 | head -1`
 IFS=',' read -a CONTAINERS <<< "$CONTAINERS"
 
 echo "Waiting for things to settle"
-sleep 10
+if [ "$SQL" = "" ] || [ "$SQL" = "sqlite" ]; then
+	sleep 2 # less servers to wait for
+else
+	sleep 10
+fi
 
 echo "Starting tests"
 

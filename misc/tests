@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /var/www/owncloud
+cd $WEBROOT
 
 occ maintenance:install --admin-user=admin --admin-pass=admin
  
