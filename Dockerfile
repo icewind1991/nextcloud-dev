@@ -1,4 +1,4 @@
-FROM icewind1991/php7-nginx
+FROM icewind1991/php-nginx:5
 MAINTAINER  Robin Appelman <robin@icewind.nl>
 # MAINTAINER Robin Schneider <ypid@riseup.net>
 # MAINTAINER silvio <silvio@port1024.net>
@@ -15,7 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
 		attr \
 		git
         
-RUN wget https://phar.phpunit.de/phpunit.phar -O /root/phpunit.phar
+RUN wget https://phar.phpunit.de/phpunit.phar -O /usr/local/bin/phpunit.phar
 
 ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php /root/
 ADD configs/nginx-app.conf /etc/nginx/

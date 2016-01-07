@@ -4,6 +4,6 @@ cd $WEBROOT
 
 occ maintenance:install --admin-user=admin --admin-pass=admin
  
-cd tests
+cd $WEBROOT/tests
 
-phpunit --configuration phpunit.xml.dist
+phpunit --configuration $WEBROOT/tests/phpunit.xml.dist

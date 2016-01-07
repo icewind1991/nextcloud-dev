@@ -3,7 +3,7 @@
 SQL=$1
 
 echo "Starting servers"
-CONTAINERS=`ocserver $SQL | tail -2 | head -1`
+CONTAINERS=`ocserver $@ | tail -2 | head -1`
 
 IFS=',' read -a CONTAINERS <<< "$CONTAINERS"
 
