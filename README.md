@@ -24,10 +24,30 @@ Replace `/srv/http/owncloud` with the location of the ownCloud source
 
 Edit `misc/ocserver` with the location of the ownCloud source and copy or symlink it to somewhere without your $PATH
 
+### Database
+
 You can specify the database backend to be used by providing it as argument to the `ocserver` command.
 The following database backends are supported `sqlite` (default), `mysql`, `pgsql` and `oci`.
 
+```
+ocserver mysql
+```
+
 For any database backends besides sqlite a seperate container will be started for the database.
+
+### PHP version
+
+You can specificy php version 5 (5.6) or 7 by passing it as seccond argument to `ocserver` (defaults to 5)
+
+```
+ocserver mysql 7
+```
+
+### Blackfire integration
+
+You can enable [blackfire.io](https://blackfire.io) integration by defining BLACKFIRE_SERVER_ID and BLACKFIRE_SERVER_TOKEN as enviroment variables or starting a "blackfire" container beforehand.
+
+See https://blackfire.io/docs/integrations/docker#running-the-agent for more information about using the blackfire agent with docker
 
 ## octests
 
