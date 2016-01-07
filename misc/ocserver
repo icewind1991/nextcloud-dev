@@ -1,5 +1,4 @@
 #!/bin/bash
-
 OC_SOURCE="/srv/http/owncloud"
 WORKDIR="/tmp/oc-docker"
 
@@ -19,13 +18,16 @@ if [ "$PHP_VERSION" != "5" ] && [ "$PHP_VERSION" != "7" ]; then
 	exit
 fi;
 
-if [ -z "$BLACKFIRE_SERVER_TOKEN" ]; then
+echo $BLACKFIRE_SERVER_TOKEN
+
+BLACKFIRE_RUNNING=$(docker inspect --format="{{ .State.Running }}" blackfire 2> /dev/null)
+BLACKFIRE_EXIT_CODE=$?
+if [ -z "$BLACKFIRE_SERVER_TOKEN" ] && [ $BLACKFIRE_EXIT_CODE -eq 1 ]; then # we either need the blackfire config or already have an existing container
 	echo "Set \$BLACKFIRE_SERVER_TOKEN and \$BLACKFIRE_SERVER_ID to enable blackfire integration (https://blackfire.io/docs/integrations/docker)"
 	LINK_BLACKFIRE=""
 else
-	BLACKFIRE_RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
-	// ensure blackfire agent is running
-	if [ $? -eq 1 ]; then
+	# ensure blackfire agent is running
+	if [ $BLACKFIRE_EXIT_CODE -eq 1 ]; then
 		docker run --name="blackfire" -d -e BLACKFIRE_SERVER_ID=$BLACKFIRE_SERVER_ID -e BLACKFIRE_SERVER_TOKEN=$BLACKFIRE_SERVER_TOKEN blackfire/blackfire
 	elif [ "$RUNNING" == "false" ]; then
 		docker start blackfire
@@ -33,10 +35,9 @@ else
 	LINK_BLACKFIRE="--link blackfire:blackfire"
 fi;
 
-
 WEBROOT="/var/www/html"
 VOLUMES="-v $OC_SOURCE:$WEBROOT -v $WORKDIR/$NAME/data:$WEBROOT/data -v $WORKDIR/$NAME/config:$WEBROOT/config"
-DOCKER_IMAGE="icewind1991/php-nginx:$PHP_VERSION"
+DOCKER_IMAGE="icewind1991/owncloud-dev:$PHP_VERSION"
 
 if [ "$SQL" = "mysql" ]; then
 	docker run --name "$NAME-mysql" -e MYSQL_ROOT_PASSWORD=$SQL_PASS -e MYSQL_PASSWORD=owncloud -e MYSQL_USER=owncloud -e MYSQL_DATABASE=owncloud -d mysql:latest
