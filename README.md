@@ -49,9 +49,13 @@ You can enable [blackfire.io](https://blackfire.io) integration by defining BLAC
 
 See https://blackfire.io/docs/integrations/docker#running-the-agent for more information about using the blackfire agent with docker
 
+Current blackfire only works with php5
+
 ## octests
 
-`misc/ocserver` starts a new owncloud server in a container and executes the php test suite on it
+`misc/octests` starts a new owncloud server in a container and executes the php test suite on it.
+
+`octests` takes the same arguments for database and php version
 
 It expects `ocserver` to be located in `$PATH`
 
