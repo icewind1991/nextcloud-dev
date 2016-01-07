@@ -1,4 +1,4 @@
-FROM icewind1991/php-nginx:5
+FROM icewind1991/php-nginx:7
 MAINTAINER  Robin Appelman <robin@icewind.nl>
 # MAINTAINER Robin Schneider <ypid@riseup.net>
 # MAINTAINER silvio <silvio@port1024.net>
