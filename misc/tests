@@ -2,7 +2,7 @@
 
 cd $WEBROOT
 
-occ maintenance:install --admin-user=admin --admin-pass=admin
+install admin admin
  
 cd $WEBROOT/tests
 
