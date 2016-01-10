@@ -29,7 +29,7 @@ else
 	# ensure blackfire agent is running
 	if [ $BLACKFIRE_EXIT_CODE -eq 1 ]; then
 		docker run --name="blackfire" -d -e BLACKFIRE_SERVER_ID=$BLACKFIRE_SERVER_ID -e BLACKFIRE_SERVER_TOKEN=$BLACKFIRE_SERVER_TOKEN blackfire/blackfire
-	elif [ "$RUNNING" == "false" ]; then
+	elif [ "$BLACKFIRE_RUNNING" == "false" ]; then
 		docker start blackfire
 	fi;
 	LINK_BLACKFIRE="--link blackfire:blackfire"
