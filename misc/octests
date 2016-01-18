@@ -10,6 +10,8 @@ IFS=',' read -a CONTAINERS <<< "$CONTAINERS"
 echo "Waiting for things to settle"
 if [ "$SQL" = "" ] || [ "$SQL" = "sqlite" ]; then
 	sleep 2 # less servers to wait for
+elif [ "$SQL" = "oci" ]; then
+	sleep 30 # oracle is always a bit lazy
 else
 	sleep 10
 fi

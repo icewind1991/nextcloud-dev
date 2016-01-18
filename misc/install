@@ -5,8 +5,14 @@ PASSWORD=$2
 
 if [ -z "$USER" ] || [ -z "$PASSWORD" ]; then
 	echo "Usage: install \$USER \$PASSWORD"
+	exit;
 fi
 
 cd $WEBROOT
 
-occ maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=owncloud --database-host=$SQL --database-user=owncloud --database-pass=owncloud
+if [ "$SQL" = "oci" ]; then
+	# oracle is a special snowflake
+	occ maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=xe --database-host=$SQL --database-user=system --database-pass=oracle
+else
+	occ maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=owncloud --database-host=$SQL --database-user=owncloud --database-pass=owncloud
+fi;
