@@ -1,9 +1,13 @@
 #!/bin/bash
 
 SQL=$1
+PHP_VERSION=$2
+
+shift
+shift
 
 echo "Starting servers"
-CONTAINERS=`ocserver $@ | tail -2 | head -1`
+CONTAINERS=`ocserver $SQL $PHP_VERSION | tail -2 | head -1`
 
 IFS=',' read -a CONTAINERS <<< "$CONTAINERS"
 
@@ -18,7 +22,7 @@ fi
 
 echo "Starting tests"
 
-docker exec ${CONTAINERS[0]} tests
+docker exec ${CONTAINERS[0]} tests $@
 
 echo "Cleaning up"
 
