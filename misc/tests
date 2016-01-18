@@ -6,4 +6,11 @@ install admin admin
  
 cd $WEBROOT/tests
 
-phpunit --configuration $WEBROOT/tests/phpunit.xml.dist
+
+# we need write permissions for these
+chmod 0777 apps
+mkdir -p $WEBROOT/apps/namespacetestapp
+chmod 0777 $WEBROOT/apps/namespacetestapp
+chmod 0777 data
+
+su - www-data -s /bin/bash -c "cd $WEBROOT/tests; phpunit --configuration $WEBROOT/tests/phpunit.xml.dist"
