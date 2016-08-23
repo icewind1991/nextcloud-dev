@@ -24,7 +24,7 @@ RUN mkdir --parent /var/log/cron
 ADD configs/cron.conf /etc/oc-cron.conf
 RUN crontab /etc/oc-cron.conf
 
-ADD misc/bootstrap.sh misc/occ misc/tests misc/phpunit misc/install /usr/local/bin/
+ADD misc/bootstrap.sh misc/occ misc/tests misc/phpunit misc/install misc/occ misc/integration /usr/local/bin/
 
 ENV WEBROOT /var/www/html
 
