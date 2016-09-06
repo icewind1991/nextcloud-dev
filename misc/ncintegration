@@ -7,7 +7,7 @@ shift
 shift
 
 echo "Starting servers"
-CONTAINERS=`ocserver $SQL $PHP_VERSION | tail -2 | head -1`
+CONTAINERS=`ncserver $SQL $PHP_VERSION | tail -2 | head -1`
 
 IFS=',' read -a CONTAINERS <<< "$CONTAINERS"
 

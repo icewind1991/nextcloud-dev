@@ -7,7 +7,7 @@ shift
 shift
 
 echo "Starting servers"
-CONTAINERS=`ocserver $SQL $PHP_VERSION | tail -2 | head -1`
+CONTAINERS=`ncserver $SQL $PHP_VERSION | tail -2 | head -1`
 
 IFS=',' read -a CONTAINERS <<< "$CONTAINERS"
 
@@ -17,7 +17,7 @@ if [ "$SQL" = "" ] || [ "$SQL" = "sqlite" ]; then
 elif [ "$SQL" = "oci" ]; then
 	sleep 30 # oracle is always a bit lazy
 else
-	sleep 10
+	sleep 15
 fi
 
 echo "Starting tests"
