@@ -4,6 +4,8 @@ touch /var/log/nginx/access.log
 touch /var/log/nginx/error.log
 touch /var/log/cron/owncloud.log
 
+cp /root/config.php /var/www/html/config/config.php
+
 if [ "$SQL" = "mysql" ]
 then
 	cp /root/autoconfig_mysql.php /var/www/html/config/autoconfig.php
@@ -24,6 +26,11 @@ chown -R www-data:www-data /var/www/html/data /var/www/html/config
 echo "Starting server using $SQL database…"
 
 tail --follow --retry /var/log/nginx/*.log /var/log/cron/owncloud.log &
+
+if [ -n "$S3" ]
+then
+	sed -i '/\/\/PLACEHOLDER/ r /root/s3.php' /var/www/html/config/config.php
+fi
 
 /usr/sbin/cron -f &
 /usr/bin/redis-server &

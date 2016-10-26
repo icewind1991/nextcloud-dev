@@ -17,7 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
         
 RUN wget https://phar.phpunit.de/phpunit.phar -O /usr/local/bin/phpunit.phar
 
-ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php /root/
+ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php /root/
 ADD configs/nginx-app.conf /etc/nginx/
 
 RUN mkdir --parent /var/log/cron
