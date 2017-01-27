@@ -1,5 +1,5 @@
 #!/bin/bash
-OC_SOURCE="/srv/http/owncloud"
+OC_SOURCE="/home/robin/Projects/nextcloud"
 WORKDIR="/tmp/oc-docker"
 
 SQL=$1
@@ -10,6 +10,14 @@ SQL_PASS=`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c32;echo;`
 mkdir -p "$WORKDIR/$NAME/data"
 mkdir -p "$WORKDIR/$NAME/config"
 mkdir -p "$WORKDIR/$NAME/data-autotest"
+mkdir -p "$WORKDIR/$NAME/skeleton"
+mkdir -p "$WORKDIR/$NAME/integration"
+mkdir -p "$WORKDIR/$NAME/integration/output"
+mkdir -p "$WORKDIR/$NAME/integration/work"
+mkdir -p "$WORKDIR/$NAME/integration/vendor"
+touch "$WORKDIR/$NAME/integration/composer.lock"
+
+mkdir -p "$WORKDIR/composer/cache"
 
 PHP_VERSION=$2
 PHP_VERSION=${PHP_VERSION:-5}
@@ -54,9 +62,10 @@ else
 fi;
 
 WEBROOT="/var/www/html"
-VOLUMES="-v $OC_SOURCE:$WEBROOT -v $WORKDIR/$NAME/data:$WEBROOT/data -v $WORKDIR/$NAME/config:$WEBROOT/config -v $WORKDIR/$NAME/data-autotest:$WEBROOT/data-autotest"
-DOCKER_IMAGE="icewind1991/nextcloud-dev:$PHP_VERSION"
-# DOCKER_IMAGE="nc-dev"
+DATAROOT="$WORKDIR/$NAME"
+VOLUMES="-v $OC_SOURCE:$WEBROOT -v $DATAROOT/data:$WEBROOT/data -v $DATAROOT/config:$WEBROOT/config -v $DATAROOT/data-autotest:$WEBROOT/data-autotest -v $DATAROOT/skeleton:$WEBROOT/core/skeleton/ -v  $OC_SOURCE/core/skeleton/welcome.txt:$WEBROOT/core/skeleton/welcome.txt:ro -v $DATAROOT/integration/vendor:$WEBROOT/build/integration/vendor -v $DATAROOT/integration/work:$WEBROOT/build/integration/work -v $DATAROOT/integration/output:$WEBROOT/build/integration/output -v $DATAROOT/integration/composer.lock:$WEBROOT/build/integration/composer.lock -v $WORKDIR/composer/cache:/var/www/.composer/cache"
+# DOCKER_IMAGE="icewind1991/nextcloud-dev:$PHP_VERSION"
+DOCKER_IMAGE="nc"
 
 if [ "$SQL" = "mysql" ]; then
 	docker run --name "$NAME-mysql" -e MYSQL_ROOT_PASSWORD=$SQL_PASS -e MYSQL_PASSWORD=owncloud -e MYSQL_USER=owncloud -e MYSQL_DATABASE=owncloud -d mysql:latest

@@ -1,4 +1,4 @@
 #!/bin/sh 
 
 cd $WEBROOT/build/integration
-./run.sh $@
+sudo -u www-data ./run.sh $@
