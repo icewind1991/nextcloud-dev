@@ -64,8 +64,8 @@ fi;
 WEBROOT="/var/www/html"
 DATAROOT="$WORKDIR/$NAME"
 VOLUMES="-v $OC_SOURCE:$WEBROOT -v $DATAROOT/data:$WEBROOT/data -v $DATAROOT/config:$WEBROOT/config -v $DATAROOT/data-autotest:$WEBROOT/data-autotest -v $DATAROOT/skeleton:$WEBROOT/core/skeleton/ -v  $OC_SOURCE/core/skeleton/welcome.txt:$WEBROOT/core/skeleton/welcome.txt:ro -v $DATAROOT/integration/vendor:$WEBROOT/build/integration/vendor -v $DATAROOT/integration/work:$WEBROOT/build/integration/work -v $DATAROOT/integration/output:$WEBROOT/build/integration/output -v $DATAROOT/integration/composer.lock:$WEBROOT/build/integration/composer.lock -v $WORKDIR/composer/cache:/var/www/.composer/cache"
-# DOCKER_IMAGE="icewind1991/nextcloud-dev:$PHP_VERSION"
-DOCKER_IMAGE="nc"
+DOCKER_IMAGE="icewind1991/nextcloud-dev:$PHP_VERSION"
+#DOCKER_IMAGE="nc"
 
 if [ "$SQL" = "mysql" ]; then
 	docker run --name "$NAME-mysql" -e MYSQL_ROOT_PASSWORD=$SQL_PASS -e MYSQL_PASSWORD=owncloud -e MYSQL_USER=owncloud -e MYSQL_DATABASE=owncloud -d mysql:latest
