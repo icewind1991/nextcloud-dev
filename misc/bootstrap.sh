@@ -24,6 +24,8 @@ fi
 chown -R www-data:www-data /var/www/html/data /var/www/html/config
 chown www-data:www-data /var/www/html/core/skeleton /var/www/html/build/integration/vendor /var/www/html/build/integration/composer.lock /var/www/html/build/integration/output /var/www/html/build/integration/work /var/www/html/core/skeleton /var/www/.composer/cache
 
+echo "{}" > /var/www/html/build/integration/composer.lock
+
 echo "Starting server using $SQL database…"
 
 tail --follow --retry /var/log/nginx/*.log /var/log/cron/owncloud.log &
