@@ -1,11 +1,6 @@
 #!/bin/sh
 
-cd $WEBROOT
-
-install admin admin
- 
 cd $WEBROOT/tests
-
 
 # we need write permissions for these
 chmod 0777 apps

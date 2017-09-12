@@ -22,6 +22,7 @@ fi
 
 echo "Starting tests"
 
+docker exec ${CONTAINERS[0]} install admin admin
 docker exec ${CONTAINERS[0]} tests $@
 
 echo "Cleaning up"
