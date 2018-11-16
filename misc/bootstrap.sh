@@ -35,6 +35,11 @@ then
 	sed -i '/\/\/PLACEHOLDER/ r /root/s3.php' /var/www/html/config/config.php
 fi
 
+if [ -n "$SWIFT" ]
+then
+    sed -i '/\/\/PLACEHOLDER/ r /root/swift.php' /var/www/html/config/config.php
+fi
+
 /usr/sbin/cron -f &
 /usr/bin/redis-server &
 /usr/local/sbin/php-fpm &

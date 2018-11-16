@@ -3,11 +3,15 @@ OC_SOURCE="/srv/http/owncloud"
 WORKDIR="/tmp/oc-docker"
 HOST_IP=$(ip -4 route get 8.8.8.8 | awk {'print $7'} | tr -d '\n')
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ -f "$DIR/.env" ]; then
+	export $(cat "$DIR/.env" | grep -v ^# | xargs)
+fi
 SQL=$1
 PORT=`python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()'`
 NAME="oc-$PORT";
 SQL_PASS=`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c32;echo;`
- 
+
 mkdir -p "$WORKDIR/$NAME/data"
 mkdir -p "$WORKDIR/$NAME/config"
 mkdir -p "$WORKDIR/$NAME/data-autotest"
@@ -45,6 +49,12 @@ do
 		EXTRA_CONTAINERS="$EXTRA_CONTAINERS,$NAME-s3"
 		EXTRA_ENV="$EXTRA_ENV -e S3=1"
 	fi
+    if [ "$arg" = "swift" ]; then
+        docker run --name "$NAME-swift" -d icewind1991/dockswift:nextcloud-ci
+        LINK="$LINK --link $NAME-swift:swift --link $NAME-swift:keystone --link $NAME-swift:dockswift"
+        EXTRA_CONTAINERS="$EXTRA_CONTAINERS,$NAME-swift"
+        EXTRA_ENV="$EXTRA_ENV -e SWIFT=1"
+    fi
 done
 
 BLACKFIRE_RUNNING=$(docker inspect --format="{{ .State.Running }}" blackfire 2> /dev/null)
@@ -59,7 +69,11 @@ else
 	elif [ "$BLACKFIRE_RUNNING" == "false" ]; then
 		docker start blackfire
 	fi;
-	LINK_BLACKFIRE="--link blackfire:blackfire"
+    sleep 2
+    BLACKFIRE_RUNNING=$(docker inspect --format="{{ .State.Running }}" blackfire 2> /dev/null)
+    if [ "$BLACKFIRE_RUNNING" == "true" ]; then
+    	LINK_BLACKFIRE="--link blackfire:blackfire"
+    fi;
 fi;
 
 WEBROOT="/var/www/html"
@@ -69,7 +83,7 @@ DOCKER_IMAGE="icewind1991/nextcloud-dev:$PHP_VERSION"
 #DOCKER_IMAGE="nc"
 
 if [ "$SQL" = "mysql" ]; then
-	docker run --name "$NAME-mysql" -e MYSQL_ROOT_PASSWORD=$SQL_PASS -e MYSQL_PASSWORD=owncloud -e MYSQL_USER=owncloud -e MYSQL_DATABASE=owncloud -d mysql:latest
+	docker run --name "$NAME-mysql" -e MYSQL_ROOT_PASSWORD=$SQL_PASS -e MYSQL_PASSWORD=owncloud -e MYSQL_USER=owncloud -e MYSQL_DATABASE=owncloud -d mysql:5.7
 	docker run --name $NAME -d -p $PORT:80 $LINK_BLACKFIRE --link "$NAME-mysql:mysql" $LINK $EXTRA_ENV -e SQL=mysql $VOLUMES $DOCKER_IMAGE
 	echo "$NAME,$NAME-mysql$EXTRA_CONTAINERS"
 elif [ "$SQL" = "pgsql" ]; then
@@ -85,4 +99,4 @@ else
 	echo "$NAME$EXTRA_CONTAINERS"
 fi
 
-echo "Running on http://localhost:$PORT" 
+echo "Running on http://localhost:$PORT"
