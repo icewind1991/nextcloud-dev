@@ -2,12 +2,19 @@
 
 SQL=$1
 PHP_VERSION=$2
+EXTRA=$3
+EXTRA_ARG=""
 
 shift
 shift
+
+if [ "$EXTRA" = "s3" ] || [ "$EXTRA" = "azure" ] || [ "$EXTRA" = "azure" ]; then
+    shift
+    EXTRA_ARG=$EXTRA
+fi
 
 echo "Starting servers"
-CONTAINERS=`ncserver $SQL $PHP_VERSION | tail -2 | head -1`
+CONTAINERS=`ncserver $SQL $PHP_VERSION $EXTRA_ARG | tail -2 | head -1`
 
 IFS=',' read -a CONTAINERS <<< "$CONTAINERS"
 

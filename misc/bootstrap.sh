@@ -40,6 +40,11 @@ then
     sed -i '/\/\/PLACEHOLDER/ r /root/swift.php' /var/www/html/config/config.php
 fi
 
+if [ -n "$AZURE" ]
+then
+    sed -i '/\/\/PLACEHOLDER/ r /root/azure.php' /var/www/html/config/config.php
+fi
+
 /usr/sbin/cron -f &
 /usr/bin/redis-server &
 /usr/local/sbin/php-fpm &
