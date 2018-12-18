@@ -8,7 +8,7 @@ EXTRA_ARG=""
 shift
 shift
 
-if [ "$EXTRA" = "s3" ] || [ "$EXTRA" = "azure" ] || [ "$EXTRA" = "azure" ]; then
+if [ "$EXTRA" = "s3" ] || [ "$EXTRA" = "swift" ] || [ "$EXTRA" = "swiftv2" ] || [ "$EXTRA" = "swiftv3" ] || [ "$EXTRA" = "azure" ]; then
     shift
     EXTRA_ARG=$EXTRA
 fi

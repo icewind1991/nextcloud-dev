@@ -40,6 +40,11 @@ then
     sed -i '/\/\/PLACEHOLDER/ r /root/swift.php' /var/www/html/config/config.php
 fi
 
+if [ -n "$SWIFTV3" ]
+then
+    sed -i '/\/\/PLACEHOLDER/ r /root/swiftv3.php' /var/www/html/config/config.php
+fi
+
 if [ -n "$AZURE" ]
 then
     sed -i '/\/\/PLACEHOLDER/ r /root/azure.php' /var/www/html/config/config.php
