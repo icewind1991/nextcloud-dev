@@ -27,9 +27,20 @@ else
 	sleep 15
 fi
 
-echo "Starting tests"
+TEST_PATH=$1
 
+if [[ "$TEST_PATH" =~ apps/([a-zA-Z_0-9]+)/ ]]; then 
+    APP=${BASH_REMATCH[1]};
+else
+    APP=""
+fi
+
+echo "Starting tests"
 docker exec ${CONTAINERS[0]} install admin admin
+if [ -n "$APP" ]; then
+    echo "Enabling app $APP"
+    docker exec ${CONTAINERS[0]} occ app:enable $APP
+fi
 docker exec ${CONTAINERS[0]} tests $@
 
 echo "Cleaning up"
