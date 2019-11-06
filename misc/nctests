@@ -4,6 +4,7 @@ SQL=$1
 PHP_VERSION=$2
 EXTRA=$3
 EXTRA_ARG=""
+WORKDIR="/tmp/oc-docker"
 
 shift
 shift
@@ -47,3 +48,5 @@ echo "Cleaning up"
 
 docker kill ${CONTAINERS[0]} ${CONTAINERS[1]}
 docker rm ${CONTAINERS[0]} ${CONTAINERS[1]}
+
+sudo rm -rf $WORKDIR/${CONTAINERS[0]}
