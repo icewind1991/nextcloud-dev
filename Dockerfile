@@ -15,7 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
 		attr \
 		git
         
-RUN wget https://phar.phpunit.de/phpunit-6.phar -O /usr/local/bin/phpunit.phar
+RUN wget https://phar.phpunit.de/phpunit-8.phar -O /usr/local/bin/phpunit.phar
 
 ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/swift.php configs/swiftv3.php configs/azure.php configs/config.php /root/
 ADD configs/nginx-app.conf /etc/nginx/
