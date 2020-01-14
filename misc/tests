@@ -10,4 +10,4 @@ chmod 0777 data
 
 command="cd $WEBROOT/tests; phpunit --configuration $WEBROOT/tests/phpunit-autotest.xml $@"
 
-su -m - www-data -s /bin/sh -c "$command"
+su - www-data -s /bin/sh -c "$command"
