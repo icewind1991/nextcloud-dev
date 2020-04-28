@@ -1,5 +1,5 @@
 #!/bin/bash
-OC_SOURCE="/srv/http/cloud"
+OC_SOURCE="/srv/http/owncloud"
 WORKDIR="/tmp/oc-docker"
 HOST_IP=$(ip -4 route get 8.8.8.8 | awk {'print $7'} | tr -d '\n')
 
@@ -20,6 +20,7 @@ mkdir -p "$WORKDIR/$NAME/integration"
 mkdir -p "$WORKDIR/$NAME/integration/output"
 mkdir -p "$WORKDIR/$NAME/integration/work"
 mkdir -p "$WORKDIR/$NAME/integration/vendor"
+mkdir -p "$WORKDIR/$NAME/spreed/integration/vendor"
 touch "$WORKDIR/$NAME/integration/composer.lock"
 touch "$WORKDIR/$NAME/config/CAN_INSTALL"
 touch "$WORKDIR/$NAME/phpunit-cache"
@@ -95,7 +96,7 @@ done
 
 WEBROOT="/var/www/html"
 DATAROOT="$WORKDIR/$NAME"
-VOLUMES="-v $OC_SOURCE:$WEBROOT -v $DATAROOT/data:$WEBROOT/data -v $DATAROOT/config:$WEBROOT/config -v $DATAROOT/data-autotest:$WEBROOT/data-autotest -v $DATAROOT/skeleton:$WEBROOT/core/skeleton/ -v  $OC_SOURCE/core/skeleton/welcome.txt:$WEBROOT/core/skeleton/welcome.txt:ro -v $DATAROOT/integration/vendor:$WEBROOT/build/integration/vendor -v $DATAROOT/integration/work:$WEBROOT/build/integration/work -v $DATAROOT/integration/output:$WEBROOT/build/integration/output -v $DATAROOT/integration/composer.lock:$WEBROOT/build/integration/composer.lock -v $WORKDIR/composer/cache:/var/www/.composer/cache -v $DATAROOT/phpunit-cache:$WEBROOT/tests/.phpunit.result.cache"
+VOLUMES="-v $OC_SOURCE:$WEBROOT -v $DATAROOT/data:$WEBROOT/data -v $DATAROOT/config:$WEBROOT/config -v $DATAROOT/data-autotest:$WEBROOT/data-autotest -v $DATAROOT/skeleton:$WEBROOT/core/skeleton/ -v  $OC_SOURCE/core/skeleton/welcome.txt:$WEBROOT/core/skeleton/welcome.txt:ro -v $DATAROOT/integration/vendor:$WEBROOT/build/integration/vendor -v $DATAROOT/integration/work:$WEBROOT/build/integration/work -v $DATAROOT/integration/output:$WEBROOT/build/integration/output -v $DATAROOT/integration/composer.lock:$WEBROOT/build/integration/composer.lock -v $WORKDIR/composer/cache:/var/www/.composer/cache -v $DATAROOT/phpunit-cache:$WEBROOT/tests/.phpunit.result.cache -v $WORKDIR/$NAME/spreed/integration/vendor:/var/www/html/apps/spreed/tests/integration/vendor"
 DOCKER_IMAGE="icewind1991/nextcloud-dev:$PHP_VERSION"
 #DOCKER_IMAGE="nc"
 
