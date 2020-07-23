@@ -13,7 +13,9 @@ RUN DEBIAN_FRONTEND=noninteractive ;\
 		sudo \
 		wget \
 		attr \
-		git
+		git \
+        neovim \
+        nano
         
 RUN wget https://phar.phpunit.de/phpunit-8.phar -O /usr/local/bin/phpunit.phar
 
