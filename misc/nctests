@@ -38,6 +38,12 @@ fi
 
 echo "Starting tests"
 docker exec ${CONTAINERS[0]} install admin admin
+
+if [[ "$TEST_PATH" =~ apps/files_external_([a-zA-Z_0-9]+)/ ]]; then
+    echo "Enabling app files_external"
+    docker exec ${CONTAINERS[0]} occ app:enable files_external
+fi
+
 if [ -n "$APP" ]; then
     echo "Enabling app $APP"
     docker exec ${CONTAINERS[0]} occ app:enable $APP
