@@ -3,7 +3,7 @@ OC_SOURCE="/srv/http/owncloud"
 WORKDIR="/tmp/oc-docker"
 HOST_IP=$(ip -4 route get 8.8.8.8 | awk {'print $7'} | tr -d '\n')
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname $( dirname $( realpath "${BASH_SOURCE[0]}" ) ) )" && pwd )"
 if [ -f "$DIR/.env" ]; then
     export $(cat "$DIR/.env" | grep -v ^# | xargs)
 fi
@@ -91,6 +91,15 @@ do
                 LINK="$LINK --link blackfire:blackfire"
             fi;
         fi;
+    fi
+    if [ "$arg" = "ldap" ]; then
+        ADMIN_PORT=$((PORT + 1))
+        docker run --name $NAME-ldap -e LDAP_ADMIN_PASSWORD="admin" -v $DIR/configs/ldap:/container/service/slapd/assets/config/bootstrap/ldif/custom -d osixia/openldap:1.4.0 --copy-service
+        docker run --name $NAME-ldapadmin --link $NAME-ldap:ldap -p $ADMIN_PORT:443 -e PHPLDAPADMIN_LDAP_HOSTS=ldap -d osixia/phpldapadmin:0.9.0
+        LINK="$LINK --link $NAME-ldap:ldap"
+        EXTRA_CONTAINERS="$EXTRA_CONTAINERS,$NAME-ldap,$NAME-ldapadmin"
+        EXTRA_ENV="$EXTRA_ENV -e LDAP=1"
+        echo "ldapadmin: https://localhost:${ADMIN_PORT}/"
     fi
 done
 
